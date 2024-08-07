@@ -5,6 +5,6 @@ const router = express.Router();
 
 
 router.use('/recipe', recipeRoutes)
-router.use('reviews', reviewRoutes)
+router.use('/reviews', reviewRoutes)
 
 module.exports = router;
