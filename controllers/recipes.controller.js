@@ -52,7 +52,7 @@ const getAllRecipes = async (req, res) => {
 const getRecipeById = async (req, res) => {
   try {
     const { id } = req.params;
-    const recipeById = await Recipe.findById(id);
+    const recipeById = await Recipe.findById(id).populate("reviews");
     if (!recipeById) {
       return res.status(404).json({
         success: false,
