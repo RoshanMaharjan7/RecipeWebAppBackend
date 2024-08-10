@@ -105,6 +105,7 @@ const addToFavourite = async (req, res) => {
   }
 };
 
+// Fetch All Favourite Recipe of a User
 const getFavourites = async (req, res) => {
   try {
     // Populate the favoriteBooks field
@@ -115,16 +116,76 @@ const getFavourites = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Favourite Recipes fetched successfully",
-        favouriteRecipes: user.favouriteRecipes,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Favourite Recipes fetched successfully",
+      favouriteRecipes: user.favouriteRecipes,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-module.exports = { userRegister, userLogin, addToFavourite, getFavourites };
+// Fetch All Users
+const getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await User.find();
+    res.status(200).json({
+      success: true,
+      message: "Users fetched successfully",
+      data: allUsers,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// Update User by Id
+const updateUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const userById = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "User Updated successfully",
+        data: userById,
+      });
+  } catch (error) {
+    res
+      .status(401)
+      .json({ success: false, message: "Failed to update user by id" });
+  }
+};
+
+// Delete User By Id
+const deleteUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const userById = await User.findByIdAndDelete(id);
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "User deleted successfully",
+        data: userById,
+      });
+  } catch (error) {
+    res
+      .status(401)
+      .json({ success: false, message: "Failed to delete user by id" });
+  }
+};
+module.exports = {
+  userRegister,
+  userLogin,
+  addToFavourite,
+  getFavourites,
+  getAllUsers,
+  updateUserById,
+  deleteUserById,
+};
