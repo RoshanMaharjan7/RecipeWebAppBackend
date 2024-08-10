@@ -98,12 +98,37 @@ const addToFavourite = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Recipe added to favorites",
-      favoriteBooks: req.user.favouriteRecipes,
+      favouriteRecipes: user.favouriteRecipes,
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+// Remove from favourites
+const removeFromFavourites = async (req,res) => {
+    const {recipeId} = req.body;
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+          return res
+            .status(404)
+            .json({ success: false, message: "User not found" });
+        }
+
+        user.favouriteRecipes = user.favouriteRecipes.filter((item) => item != recipeId)
+        await user.save()
+
+        res.status(200).json({
+            success: true,
+            message: "Recipe removed from favorites",
+            favouriteRecipes: user.favouriteRecipes,
+          });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
 
 // Fetch All Favourite Recipe of a User
 const getFavourites = async (req, res) => {
@@ -185,6 +210,7 @@ module.exports = {
   userLogin,
   addToFavourite,
   getFavourites,
+  removeFromFavourites,
   getAllUsers,
   updateUserById,
   deleteUserById,

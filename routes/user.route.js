@@ -7,6 +7,7 @@ const {
   getAllUsers,
   updateUserById,
   deleteUserById,
+  removeFromFavourites,
 } = require("../controllers/user.controller");
 const authenicate = require("../middlewares/auth.middleware");
 
@@ -16,6 +17,7 @@ router.post("/register", userRegister);
 router.post("/login", userLogin);
 router.post("/favourites", authenicate, addToFavourite);
 router.get("/favourites", authenicate, getFavourites);
+router.patch('/favourites',authenicate, removeFromFavourites)
 router.get("/", getAllUsers);
 router.patch("/:id", updateUserById);
 router.delete("/:id", deleteUserById);
