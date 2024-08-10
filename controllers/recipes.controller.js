@@ -2,12 +2,13 @@ const Recipe = require("../models/recipes.model.js");
 
 // Create New Recipe
 const createRecipe = async (req, res) => {
-  const { title, description, ingredients, directions, chief } = req.body;
+  const { title, description, category, ingredients, directions, chief } = req.body;
 
   try {
     const newRecipe = await Recipe.create({
       title,
       description,
+      category,
       ingredients,
       directions,
       chief,
