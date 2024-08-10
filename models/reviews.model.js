@@ -17,7 +17,7 @@ const reviewSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "Recipe Id is required"],
     },
-    reviewer: reviewerSchema,
+    reviewer: [reviewerSchema],
     stars: {
       type: Number,
       required: [true, "Review Star is required"],

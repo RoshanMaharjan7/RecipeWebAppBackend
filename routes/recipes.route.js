@@ -3,7 +3,7 @@ const { getAllRecipes, createRecipe, getRecipeById, updateById, deleteById } = r
 const authenicate = require('../middlewares/auth.middleware');
 const router = express.Router();
 
-router.get('/', authenicate, getAllRecipes);
+router.get('/', getAllRecipes);
 router.post('/', createRecipe);
 router.get('/:id', getRecipeById);
 router.patch('/:id', updateById);
