@@ -15,7 +15,7 @@ const addNewReview = async (req,res) => {
         const newReview = new Review({recipeId: recipeId, reviewer: req.user.id, stars: stars, reviewText: reviewText});
         
         // Updating recipe datas
-        recipeById.ratings.push(stars)
+        recipeById.ratings = recipeById.ratings === 0? recipeById.ratings + stars : (recipeById.ratings + stars)/2
         recipeById.reviews.push(newReview._id)
 
         console.log(newReview)

@@ -30,9 +30,10 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Recipe Chief is required"],
     },
-    ratings: [{
-      type: Number
-    }],
+    ratings: {
+      type: Number,
+      default: 0
+    },
     reviews:[{
       type: mongoose.Schema.Types.ObjectId,
       ref:"Review"

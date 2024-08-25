@@ -110,6 +110,10 @@ const deleteById = async (req, res) => {
   try {
     const { id } = req.params;
     const recipeById = await Recipe.findByIdAndDelete(id);
+    await Category.updateMany(
+      { recipes: id },
+      { $pull: { recipes: id } }
+    );
     res
       .status(201)
       .json({
