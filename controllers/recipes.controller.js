@@ -1,13 +1,16 @@
 const Recipe = require("../models/recipes.model.js");
 const Category = require('../models/category.model');
+const { uploadOnCloundinary } = require("../utils/cloudinary.js");
 
 // Create New Recipe
 const createRecipe = async (req, res) => {
   const { title, description, category, ingredients, directions, chief } = req.body;
 
   try {
+    const imageResult = await uploadOnCloundinary(req.files?.recipeImage[0]?.path) ;
     const newRecipe = new Recipe({
       title,
+      recipeImage: imageResult.secure_url,
       description,
       category,
       ingredients,
@@ -37,7 +40,7 @@ const createRecipe = async (req, res) => {
       message: "Failed to create new recipe",
       error: error.message,
     });
-    console.error("Error", error);
+    // console.error("Error", error);
   }
 };
 

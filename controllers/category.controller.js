@@ -1,11 +1,13 @@
 const Category = require('../models/category.model')
+const { uploadOnCloundinary } = require("../utils/cloudinary.js");
 
 // create new Category
 const createCategory = async (req, res) => {
     const {categoryTitle, categoryImage} = req.body;
 
     try {
-        const newCategory = new Category({categoryTitle, categoryImage: categoryImage});
+        const imageResult = await uploadOnCloundinary(req.files?.categoryImage[0]?.path) ;
+        const newCategory = new Category({categoryTitle, categoryImage: imageResult.secure_url});
 
         await newCategory.save()
 
