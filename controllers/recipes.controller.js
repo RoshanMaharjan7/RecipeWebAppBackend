@@ -1,18 +1,31 @@
 const Recipe = require("../models/recipes.model.js");
+const Category = require('../models/category.model');
 
 // Create New Recipe
 const createRecipe = async (req, res) => {
   const { title, description, category, ingredients, directions, chief } = req.body;
 
   try {
-    const newRecipe = await Recipe.create({
+    const newRecipe = new Recipe({
       title,
       description,
       category,
       ingredients,
       directions,
+      category,
       chief,
     });
+
+    const categoryUpdate = category.map(categoryId => ({
+      updateOne: {
+        filter: { _id: categoryId },
+        update: { $push: { recipes: newRecipe._id } }
+      }
+    }));
+
+    await newRecipe.save()
+    await Category.bulkWrite(categoryUpdate);
+
     res.status(200).json({
       success: true,
       message: "New Recipe created successfully",

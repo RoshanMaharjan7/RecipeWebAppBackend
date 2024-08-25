@@ -10,10 +10,10 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Recipe Description is required"],
     },
-    category: {
-      type: String,
+    category: [{
+      type: mongoose.Schema.ObjectId,
       required: [true, "Recipe Category is required"],
-    },
+    }],
     ingredients: [
       {
         type: String,
