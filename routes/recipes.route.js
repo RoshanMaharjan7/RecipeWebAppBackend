@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllRecipes, createRecipe, getRecipeById, updateById, deleteById } = require('../controllers/recipes.controller');
+const { getAllRecipes, createRecipe, getRecipeById, updateById, deleteById, searchRecipe } = require('../controllers/recipes.controller');
 const authenicate = require('../middlewares/auth.middleware');
 const { upload } = require('../middlewares/multer.middleware');
 const router = express.Router();
@@ -9,5 +9,6 @@ router.post('/', upload.fields([{ name: "recipeImage", maxCount: 1 }]), createRe
 router.get('/:id', getRecipeById);
 router.patch('/:id', updateById);
 router.delete('/:id',deleteById)
+router.post('/search', searchRecipe)
 
 module.exports = router;

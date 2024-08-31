@@ -135,6 +135,36 @@ const deleteById = async (req, res) => {
   }
 };
 
+const searchRecipe = async (req,res) => {
+  try {
+    // Get the search query from the request
+    const query = req.body.query.toLowerCase();
+
+    // Fetch all recipes from the database
+    const allRecipes = await Recipe.find();
+
+    // Filter the recipes based on the search query
+    const results = allRecipes.filter(recipe =>
+      recipe.title.toLowerCase().includes(query)
+    );
+
+    // Return the matching results
+    res.status(200).json({
+      success: true,
+      data: results,
+    });
+  } catch (error) {
+    console.log(error)
+    res
+      .status(401)
+      .json({
+        success: false,
+        message: "Failed to delete by id",
+        error: error.message,
+      });
+  }
+}
+
 
 module.exports = {
   createRecipe,
@@ -142,4 +172,5 @@ module.exports = {
   getRecipeById,
   updateById,
   deleteById,
+  searchRecipe
 };
