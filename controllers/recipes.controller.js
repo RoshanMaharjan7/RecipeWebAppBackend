@@ -4,10 +4,11 @@ const { uploadOnCloundinary } = require("../utils/cloudinary.js");
 
 // Create New Recipe
 const createRecipe = async (req, res) => {
-  const { title, description, category, ingredients, directions, chief } = req.body;
+  const { title, description, category, ingredients, directions } = req.body;
 
   try {
-    const imageResult = await uploadOnCloundinary(req.files?.recipeImage[0]?.path) ;
+    const imageResult = await uploadOnCloundinary(req.files?.recipeImage[0]?.path);
+    console.log(req.user)
     const newRecipe = new Recipe({
       title,
       recipeImage: imageResult.secure_url,
@@ -16,12 +17,13 @@ const createRecipe = async (req, res) => {
       ingredients,
       directions,
       category,
-      chief,
+      chief: req.user.id,
     });
+    console.log(newRecipe)
 
-    const categoryUpdate = category.map(categoryId => ({
+    const categoryUpdate = category.map(ctg => ({
       updateOne: {
-        filter: { _id: categoryId },
+        filter: { _id: ctg.categoryId },
         update: { $push: { recipes: newRecipe._id } }
       }
     }));
@@ -35,12 +37,12 @@ const createRecipe = async (req, res) => {
       data: newRecipe,
     });
   } catch (error) {
-    res.status(401).json({
+    res.status(200).json({
       success: false,
       message: "Failed to create new recipe",
       error: error.message,
     });
-    // console.error("Error", error);
+    console.error("Error", error);
   }
 };
 

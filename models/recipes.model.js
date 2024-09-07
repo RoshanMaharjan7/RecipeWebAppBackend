@@ -1,5 +1,29 @@
 const mongoose = require("mongoose");
 
+const ingredientsSchema = new mongoose.Schema({
+  quantity: {
+    type: String,
+    required: [true, "Quantity is required"],
+  },
+  name: {
+    type: String,
+    required: [true, "Ingredient name is required"],
+  },
+});
+
+
+const categorySchema = new mongoose.Schema({
+  categoryId: {
+    type: mongoose.Schema.ObjectId,
+    required: [true, "Category Id is required"],
+    ref: "Category",
+  },
+  categoryName: {
+    type: String,
+    required: [true, "Category Name is required"],
+  },
+});
+
 const recipeSchema = new mongoose.Schema(
   {
     title: {
@@ -14,13 +38,15 @@ const recipeSchema = new mongoose.Schema(
       type: String,
       required: [true, "Recipe Description is required"],
     },
-    category: [{
-      type: mongoose.Schema.ObjectId,
-      required: [true, "Recipe Category is required"],
-    }],
+    category: [
+      {
+        type:  categorySchema,
+        required: [true, "Recipe Category is required"],
+      },
+    ],
     ingredients: [
       {
-        type: String,
+        type: ingredientsSchema,
         required: [true, "Recipe Ingredients is required"],
       },
     ],
