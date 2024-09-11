@@ -7,7 +7,7 @@ const Recipe = require("../models/recipes.model");
 // Create new User for user sign up
 const userRegister = async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, role } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -17,7 +17,7 @@ const userRegister = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ fullName, email, password: hashedPassword });
+    const user = new User({ fullName, email, role, password: hashedPassword });
     await user.save();
     if (!user) {
       return res
@@ -58,6 +58,7 @@ const userLogin = async (req, res) => {
         email: user.email,
         username: user.fullName,
         role: user.role,
+        favouriteRecipes: user.favouriteRecipes,
       },
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
@@ -205,6 +206,22 @@ const deleteUserById = async (req, res) => {
       .json({ success: false, message: "Failed to delete user by id" });
   }
 };
+
+
+const getCurrentUser = async (req, res) => {
+  try {
+    const {id, username, email, role, favouriteRecipes} = req.user;
+
+    res.status(200).json({
+      success: true,
+      message: "User fetched successfully",
+      data: {id:id, fullName: username , email, role, favouriteRecipes},
+    });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
 module.exports = {
   userRegister,
   userLogin,
@@ -214,4 +231,5 @@ module.exports = {
   getAllUsers,
   updateUserById,
   deleteUserById,
+  getCurrentUser
 };

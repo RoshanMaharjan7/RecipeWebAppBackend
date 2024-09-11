@@ -78,6 +78,30 @@ const getCategoryById = async (req, res) => {
   }
 };
 
+// delete category by id
+const deleteCategoryById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const categoryById = await Category.findByIdAndDelete(id)
+
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Successfully deleted category by id",
+        data: categoryById,
+      });
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Failed to find category by id",
+      error: error.message,
+    });
+    console.error("Error", error);
+  }
+};
+
 const searchCategory = async (req, res) => {
   try {
     // Get the search query from the request
@@ -110,5 +134,6 @@ module.exports = {
   createCategory,
   getAllCategory,
   getCategoryById,
+  deleteCategoryById,
   searchCategory,
 };

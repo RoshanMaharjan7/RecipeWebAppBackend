@@ -8,6 +8,7 @@ const {
   updateUserById,
   deleteUserById,
   removeFromFavourites,
+  getCurrentUser,
 } = require("../controllers/user.controller");
 const authenicate = require("../middlewares/auth.middleware");
 
@@ -21,5 +22,6 @@ router.patch('/favourites',authenicate, removeFromFavourites)
 router.get("/", getAllUsers);
 router.patch("/:id", updateUserById);
 router.delete("/:id", deleteUserById);
+router.get("/current-user", authenicate, getCurrentUser);
 
 module.exports = router;
