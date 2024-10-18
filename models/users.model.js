@@ -11,6 +11,10 @@ const userSchema = mongoose.Schema(
       required: [true, "Emaill is required"],
       unique: true,
     },
+    bio:{
+      type: String,
+      default: ""
+    },
     role: {
       type: String,
       default: "user",

@@ -58,6 +58,7 @@ const recipeSchema = new mongoose.Schema(
     ],
     chief: {
       type: String,
+      ref: "User",
       required: [true, "Recipe Chief is required"],
     },
     ratings: {

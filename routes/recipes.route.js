@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAllRecipes, createRecipe, getRecipeById, updateById, deleteById, searchRecipe } = require('../controllers/recipes.controller');
+const { getAllRecipes, createRecipe, getRecipeById, updateById, deleteById, searchRecipe, getYourRecipes } = require('../controllers/recipes.controller');
 const authenicate = require('../middlewares/auth.middleware');
 const { upload } = require('../middlewares/multer.middleware');
 const router = express.Router();

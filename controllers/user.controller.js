@@ -93,6 +93,12 @@ const addToFavourite = async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
+    if(user.favouriteRecipes.includes(recipeId)){
+      return res
+        .status(404)
+        .json({ success: false, message: "Recipe already in favorites" });
+    }
+
     user.favouriteRecipes.push(recipeId);
     await user.save();
 
@@ -135,7 +141,7 @@ const removeFromFavourites = async (req,res) => {
 const getFavourites = async (req, res) => {
   try {
     // Populate the favoriteBooks field
-    const user = await User.findById(req.user.id).populate("favouriteRecipes");
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res
         .status(404)
@@ -169,6 +175,7 @@ const getAllUsers = async (req, res) => {
 // Update User by Id
 const updateUserById = async (req, res) => {
   const { id } = req.params;
+  console.log("body",req.body);
   try {
     const userById = await User.findByIdAndUpdate(id, req.body, {
       new: true,
@@ -182,9 +189,11 @@ const updateUserById = async (req, res) => {
         data: userById,
       });
   } catch (error) {
+    console.log("Error", error);
     res
       .status(401)
       .json({ success: false, message: "Failed to update user by id" });
+      
   }
 };
 
@@ -207,7 +216,6 @@ const deleteUserById = async (req, res) => {
   }
 };
 
-
 const getCurrentUser = async (req, res) => {
   try {
     const {id, username, email, role, favouriteRecipes} = req.user;
@@ -222,6 +230,39 @@ const getCurrentUser = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 }
+
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password").populate("favouriteRecipes");
+    res.status(200).json({
+      success: true,
+      message: "Profile fetched successfully",
+      data: user,
+    });
+  }
+  catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+const getYourRecipes = async (req, res) => {
+  try {
+    const allRecipes = await Recipe.find({chief: req.user.id});
+    res.status(200).json({
+      success: true,
+      message: "Recipes fetched successfully",
+      data: allRecipes,
+    });
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Failed to fetch recipes",
+      error: error.message,
+    });
+    console.log("Error", error);
+  }
+}
+
 module.exports = {
   userRegister,
   userLogin,
@@ -231,5 +272,7 @@ module.exports = {
   getAllUsers,
   updateUserById,
   deleteUserById,
-  getCurrentUser
+  getCurrentUser,
+  getProfile,
+  getYourRecipes
 };

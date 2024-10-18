@@ -9,6 +9,8 @@ const {
   deleteUserById,
   removeFromFavourites,
   getCurrentUser,
+  getProfile,
+  getYourRecipes
 } = require("../controllers/user.controller");
 const authenicate = require("../middlewares/auth.middleware");
 
@@ -23,5 +25,7 @@ router.get("/", getAllUsers);
 router.patch("/:id", updateUserById);
 router.delete("/:id", deleteUserById);
 router.get("/current-user", authenicate, getCurrentUser);
+router.get('/profile', authenicate, getProfile);
+router.get('/your-recipes', authenicate, getYourRecipes);
 
 module.exports = router;
